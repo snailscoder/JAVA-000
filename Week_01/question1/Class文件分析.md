@@ -1,5 +1,7 @@
 # 作业1-Class文件分析
 
+### 1、Java源码
+
 ```java
 package com.snailscoder.learn.week01;
 
@@ -27,6 +29,8 @@ public class Hello {
     }
 }
 ```
+### 2、字节码分析
+非全部分析，仅按照个人理解注释了部分命令
 ```java
 Classfile /Users/huaxin/IdeaProjects/javaLearn/target/classes/com/snailscoder/learn/week01/Hello.class
   Last modified 2020-10-18; size 1043 bytes
@@ -100,13 +104,9 @@ Constant pool:
     flags: ACC_PUBLIC
     Code:
       
-      stack=1, locals=1, args_size=1
-         //从局部变量0中装载引用类型值，局部变量表中0位置为当天对象this的引用。其他局部变量从1开始。
-         //所有非静态方法编译时都会在方法参数中加入当天对象的引用this参数。
-         //因存在this，故此处args_size=1，locals=1
+      stack=1, locals=1, args_size=1           //从局部变量0中装载引用类型值，局部变量表中0位置为当天对象this的引用。其他局部变量从1开始。所有非静态方法编译时都会在方法参数中加入当天对象的引用this参数。因存在this，故此处args_size=1，locals=1
          0: aload_0
-         //调用父类的init方法
-         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         1: invokespecial #1                   //调用父类的init方法 Method java/lang/Object."<init>":()V
          4: return
       LineNumberTable:
         line 3: 0
@@ -118,17 +118,15 @@ Constant pool:
     descriptor: ([Ljava/lang/String;)V
     flags: ACC_PUBLIC, ACC_STATIC
     Code:
-      stack=3, locals=5, args_size=1      //
-         0: iconst_5              //常量5压入栈
-         1: istore_1              //局部变量表1: num
-         2: sipush        200         //将16位带符号整数200压入栈,-1~5采用单独的iconst命令将常量压入栈，其中-1为iconst_m1
-         5: istore_2              //局部变量maxValue
-         6: new           #2                  // 创建一个新对象 class com/snailscoder/learn/week01/Hello
-         9: dup                 //将栈顶的元素复制一份，也就是当前栈存在两个Hello对象的引用。
-                            //原因是下一步invokespecial调用初始化的时候会消耗一个。方法的第一个参数。
-                                              //还需要留一个引用保存到局部变量表，即赋值给局部变量hello： Hello hello = new Hello();
+      stack=3, locals=5, args_size=1
+         0: iconst_5                          //常量5压入栈
+         1: istore_1                          //局部变量表1: num
+         2: sipush        200                 //将16位带符号整数200压入栈,-1~5采用单独的iconst命令将常量压入栈，其中-1为iconst_m1
+         5: istore_2                          //局部变量maxValue
+         6: new           #2                  //创建一个新对象 class com/snailscoder/learn/week01/Hello
+         9: dup                               //将栈顶的元素复制一份，也就是当前栈存在两个Hello对象的引用。原因是下一步invokespecial调用初始化的时候会消耗一个。方法的第一个参数。还需要留一个引用保存到局部变量表，即赋值给局部变量hello： Hello hello = new Hello();
         10: invokespecial #3                  // 初始化Hello对象，Method "<init>":()V
-        13: astore_3              //将栈顶Hello对象的引用赋值给hello变量
+        13: astore_3                          //将栈顶Hello对象的引用赋值给hello变量
         14: aload_3
         15: iload_1
         16: iload_2
@@ -158,35 +156,35 @@ Constant pool:
     flags: ACC_PRIVATE
     Code:
       stack=3, locals=8, args_size=3
-         0: iconst_0             //0压入栈
-         1: istore_3             //此处为局部变量3：sum=0，其中0，1，2分别为this、num,maxValue
+         0: iconst_0                          //0压入栈
+         1: istore_3                          //此处为局部变量3：sum=0，其中0，1，2分别为this、num,maxValue
          2: getstatic     #7                  // Field MULTIPLIER:[I
-         5: astore        4           //引用类型 MULTIPLIER:[I
+         5: astore        4                   //引用类型 MULTIPLIER:[I
          7: aload         4
-         9: arraylength             //数据长度
-        10: istore        5           //数组长度放入局部变量5
+         9: arraylength                       //数据长度
+        10: istore        5                   //数组长度放入局部变量5
         12: iconst_0
-        13: istore        6           //局部变量6，当前MULTIPLIER数组的遍历索引0
+        13: istore        6                   //局部变量6，当前MULTIPLIER数组的遍历索引0
         15: iload         6
         17: iload         5
-        19: if_icmpge     49          //比较当前索引与数组长度，如果>=,则跳出循环
-        22: aload         4           //当前数组
-        24: iload         6           //当前遍历索引
-        26: iaload                //从数组中取出对应索引的元素
-        27: istore        7           //保存到本地变量7
-        29: iload_3               //局部变量3 sum
-        30: iload_1               //局部变量1：num
-        31: iload         7           //局部变量7：当前遍历的数组元素
-        33: imul                //两数相城
-        34: iadd                //乘机结果 + sum
-        35: istore_3              //sum保存在局部变量3
+        19: if_icmpge     49                  //比较当前索引与数组长度，如果>=,则跳出循环
+        22: aload         4                   //当前数组
+        24: iload         6                   //当前遍历索引
+        26: iaload                            //从数组中取出对应索引的元素
+        27: istore        7                   //保存到本地变量7
+        29: iload_3                           //局部变量3 sum
+        30: iload_1                           //局部变量1：num
+        31: iload         7                   //局部变量7：当前遍历的数组元素
+        33: imul                              //两数相城
+        34: iadd                              //乘机结果 + sum
+        35: istore_3                          //sum保存在局部变量3
         36: iload_3
         37: iload_2
-        38: if_icmple     43          //比较sum与maxValue大小，<=则跳转
-        41: iload_3               //sum压栈
-        42: ireturn               //返回
-        43: iinc          6, 1          //当前数组索引+1
-        46: goto          15          //下一个循环
+        38: if_icmple     43                  //比较sum与maxValue大小，<=则跳转
+        41: iload_3                           //sum压栈
+        42: ireturn                           //返回
+        43: iinc          6, 1                //当前数组索引+1
+        46: goto          15                  //下一个循环
         49: iload_3
         50: ireturn
       LineNumberTable:
@@ -219,11 +217,11 @@ Constant pool:
     Code:
       stack=4, locals=0, args_size=0
          0: iconst_4
-         1: newarray       int      //创建数组并将引用压入栈
-         3: dup
+         1: newarray       int                //创建数组并将引用压入栈
+         3: dup                               //复制栈顶数组引用
          4: iconst_0
          5: iconst_1
-         6: iastore
+         6: iastore                           //数组索引0赋值
          7: dup
          8: iconst_1
          9: iconst_2
